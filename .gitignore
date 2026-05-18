@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+dist/
+build/
+
+# Environment
+.env
+
+# Logs — generated at runtime, never committed
+logs/
+
+# Experiments — GLM-OCR requires transformers/torch which are not project deps
+experiments/ocr_glm.py
+
+# OS
+.DS_Store*

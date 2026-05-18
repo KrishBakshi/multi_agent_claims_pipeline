@@ -1,0 +1,173 @@
+{
+  "version": "1.2",
+  "description": "Five quick-demo examples that mirror TC001–TC005 exactly. member_id, claim_category, treatment_date, claimed_amount, and documents all match test_cases.json. Documents reference generated files in data/test_case_missing_artifacts/.",
+  "examples": [
+    {
+      "id": "QE001",
+      "label": "TC001 — Wrong Document Uploaded",
+      "description": "EMP001 Rajesh Kumar submits two prescriptions for a consultation claim. No hospital bill provided. System must detect wrong document type, not just reject generically.",
+      "member_id": "EMP001",
+      "policy_id": "PLUM_GHI_2024",
+      "claim_category": "CONSULTATION",
+      "treatment_date": "2024-11-01",
+      "claimed_amount": 1500.0,
+      "documents": [
+        {
+          "file_name": "dr_sharma_prescription.jpg",
+          "actual_type": "PRESCRIPTION",
+          "quality": "GOOD",
+          "path": "data/test_case_missing_artifacts/dr_sharma_prescription.jpg"
+        },
+        {
+          "file_name": "another_prescription.jpg",
+          "actual_type": "PRESCRIPTION",
+          "quality": "GOOD",
+          "path": "data/test_case_missing_artifacts/another_prescription.jpg"
+        }
+      ],
+      "expected": {
+        "decision": null,
+        "outcome": "STOPPED",
+        "summary": "Wrong doc type — no hospital bill",
+        "system_must": [
+          "Stop before making any claim decision",
+          "Tell the member specifically what document type was uploaded and what is needed instead",
+          "Not return a generic error — the message must name the uploaded document type and the required document type"
+        ]
+      }
+    },
+    {
+      "id": "QE002",
+      "label": "TC002 — Unreadable Document",
+      "description": "EMP004 Sneha Reddy submits a valid prescription but a blurry, unreadable pharmacy bill. System must ask for re-upload of that specific doc, not reject the claim outright.",
+      "member_id": "EMP004",
+      "policy_id": "PLUM_GHI_2024",
+      "claim_category": "PHARMACY",
+      "treatment_date": "2024-10-25",
+      "claimed_amount": 800.0,
+      "documents": [
+        {
+          "file_name": "prescription.jpg",
+          "actual_type": "PRESCRIPTION",
+          "quality": "GOOD",
+          "path": "data/test_case_missing_artifacts/prescription.jpg"
+        },
+        {
+          "file_name": "blurry_bill.jpg",
+          "actual_type": "PHARMACY_BILL",
+          "quality": "UNREADABLE",
+          "path": "data/test_case_missing_artifacts/blurry_bill.jpg"
+        }
+      ],
+      "expected": {
+        "decision": null,
+        "outcome": "STOPPED",
+        "summary": "Unreadable bill — re-upload required",
+        "system_must": [
+          "Identify that the pharmacy bill cannot be read",
+          "Ask the member to re-upload that specific document",
+          "Not reject the claim outright"
+        ]
+      }
+    },
+    {
+      "id": "QE003",
+      "label": "TC003 — Patient Name Mismatch",
+      "description": "EMP001 Rajesh Kumar submits a prescription for Rajesh but a hospital bill for Arjun Mehta. System must detect the name mismatch and surface both names, not proceed to a decision.",
+      "member_id": "EMP001",
+      "policy_id": "PLUM_GHI_2024",
+      "claim_category": "CONSULTATION",
+      "treatment_date": "2024-11-01",
+      "claimed_amount": 1500.0,
+      "documents": [
+        {
+          "file_name": "prescription_rajesh.jpg",
+          "actual_type": "PRESCRIPTION",
+          "quality": "GOOD",
+          "path": "data/test_case_missing_artifacts/prescription_rajesh.jpg"
+        },
+        {
+          "file_name": "bill_arjun.jpg",
+          "actual_type": "HOSPITAL_BILL",
+          "quality": "GOOD",
+          "path": "data/test_case_missing_artifacts/bill_arjun.jpg"
+        }
+      ],
+      "expected": {
+        "decision": null,
+        "outcome": "STOPPED",
+        "summary": "Cross-patient docs (Rajesh vs Arjun)",
+        "system_must": [
+          "Detect that the documents belong to different people",
+          "Surface this to the member with the specific names found on each document",
+          "Not proceed to a claim decision"
+        ]
+      }
+    },
+    {
+      "id": "QE004",
+      "label": "TC004 — Clean Consultation (Full Approval)",
+      "description": "EMP001 Rajesh Kumar, valid OPD consultation at City Clinic. Dr. Arun Sharma, Viral Fever, ₹1500. Expect APPROVED with 10% co-pay deducted (₹1350 approved).",
+      "member_id": "EMP001",
+      "policy_id": "PLUM_GHI_2024",
+      "claim_category": "CONSULTATION",
+      "treatment_date": "2024-11-01",
+      "claimed_amount": 1500.0,
+      "documents": [
+        {
+          "file_name": "tc004_01_prescription_emp001.jpg",
+          "actual_type": "PRESCRIPTION",
+          "quality": "GOOD",
+          "path": "data/test_case_missing_artifacts/tc004_01_prescription_emp001.jpg"
+        },
+        {
+          "file_name": "tc004_02_hospital_bill_emp001.png",
+          "actual_type": "HOSPITAL_BILL",
+          "quality": "GOOD",
+          "path": "data/test_case_missing_artifacts/tc004_02_hospital_bill_emp001.png"
+        }
+      ],
+      "expected": {
+        "decision": "APPROVED",
+        "outcome": "APPROVED",
+        "approved_amount": 1350.0,
+        "summary": "Approved ₹1,350 (10% co-pay on ₹1,500)",
+        "confidence": "above 0.85",
+        "notes": "10% co-pay applied on consultation category (₹150 deducted)"
+      }
+    },
+    {
+      "id": "QE005",
+      "label": "TC005 — Waiting Period (Diabetes)",
+      "description": "EMP005 Vikram Joshi joined 2024-09-01. Claims for Type 2 Diabetes on 2024-10-15 — within 90-day waiting period. Expect REJECTED with eligibility date stated.",
+      "member_id": "EMP005",
+      "policy_id": "PLUM_GHI_2024",
+      "claim_category": "CONSULTATION",
+      "treatment_date": "2024-10-15",
+      "claimed_amount": 3000.0,
+      "documents": [
+        {
+          "file_name": "tc005_01_prescription_emp005.jpg",
+          "actual_type": "PRESCRIPTION",
+          "quality": "GOOD",
+          "path": "data/test_case_missing_artifacts/tc005_01_prescription_emp005.jpg"
+        },
+        {
+          "file_name": "tc005_02_hospital_bill_emp005.png",
+          "actual_type": "HOSPITAL_BILL",
+          "quality": "GOOD",
+          "path": "data/test_case_missing_artifacts/tc005_02_hospital_bill_emp005.png"
+        }
+      ],
+      "expected": {
+        "decision": "REJECTED",
+        "outcome": "REJECTED",
+        "summary": "Rejected — diabetes waiting period",
+        "rejection_reasons": ["WAITING_PERIOD"],
+        "system_must": [
+          "State the date from which the member will be eligible for diabetes-related claims"
+        ]
+      }
+    }
+  ]
+}

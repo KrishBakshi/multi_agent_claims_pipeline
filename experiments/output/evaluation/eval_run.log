@@ -1,0 +1,403 @@
+# Evaluation run — 2026-05-18 13:03:17
+======================================================================
+
+────────────────────────────────────────────────────────────
+[TC001] Wrong Document Uploaded
+────────────────────────────────────────────────────────────
+13:03:17 | INFO     | claims.pipeline.graph            | [B112D30F] Pipeline started — member=EMP001 category=CONSULTATION amount=₹1500.00 docs=2 simulate_failure=False
+13:03:17 | DEBUG    | claims.pipeline.graph            | [B112D30F] → entering node: DataValidatorAgent
+13:03:17 | INFO     | claims.agents.data_validator     | [B112D30F] Starting — member=EMP001 category=CONSULTATION amount=₹1500.00 docs=2
+13:03:17 | DEBUG    | claims.agents.data_validator     | [B112D30F] PASS policy_id — PLUM_GHI_2024
+13:03:17 | INFO     | claims.agents.data_validator     | [B112D30F] PASS member_lookup — 'Rajesh Kumar' (joined 2024-04-01)
+13:03:17 | INFO     | claims.agents.data_validator     | [B112D30F] PASS policy_period — treatment 2024-11-01 within [2024-04-01, 2025-03-31]
+13:03:17 | DEBUG    | claims.agents.data_validator     | [B112D30F] PASS category — CONSULTATION
+13:03:17 | DEBUG    | claims.agents.data_validator     | [B112D30F] PASS minimum_amount — ₹1500.00 ≥ ₹500
+13:03:17 | INFO     | claims.agents.data_validator     | [B112D30F] Complete — all checks passed
+13:03:17 | DEBUG    | claims.pipeline.graph            | [B112D30F] ← exiting node: DataValidatorAgent
+13:03:17 | DEBUG    | claims.pipeline.graph            | [B112D30F] → entering node: DocParserAgent
+13:03:17 | INFO     | claims.agents.doc_parser         | [B112D30F] Starting — parsing 2 document(s)
+13:03:17 | WARNING  | claims.agents.doc_parser         | [B112D30F] No content or file_data for PRESCRIPTION (file_id=F001) — skipping
+13:03:17 | WARNING  | claims.agents.doc_parser         | [B112D30F] No content or file_data for PRESCRIPTION (file_id=F002) — skipping
+13:03:17 | INFO     | claims.agents.doc_parser         | [B112D30F] Complete — 2 extracted, 0 failed, confidence=0.80
+13:03:17 | DEBUG    | claims.pipeline.graph            | [B112D30F] ← exiting node: DocParserAgent
+13:03:17 | DEBUG    | claims.pipeline.graph            | [B112D30F] → entering node: DocValidatorAgent
+13:03:17 | INFO     | claims.agents.doc_validator      | [B112D30F] Starting — category=CONSULTATION docs=2
+13:03:17 | DEBUG    | claims.agents.doc_validator      | [B112D30F] Required types: ['PRESCRIPTION', 'HOSPITAL_BILL'] | Uploaded: {'PRESCRIPTION': 2}
+13:03:17 | WARNING  | claims.agents.doc_validator      | [B112D30F] Missing required documents: HOSPITAL_BILL (uploaded: 2× PRESCRIPTION)
+13:03:17 | WARNING  | claims.agents.doc_validator      | [B112D30F] HALT [doc_types] — Missing required document(s) for a CONSULTATION claim: HOSPITAL_BILL. You uploaded: 2× PRESCRIPTION. Please provide the missing document(s) and resubmit.
+13:03:17 | DEBUG    | claims.pipeline.graph            | [B112D30F] ← exiting node: DocValidatorAgent
+13:03:17 | WARNING  | claims.pipeline.graph            | [B112D30F] Pipeline halted early — reason: Missing required document(s) for a CONSULTATION claim: HOSPITAL_BILL. You uploaded: 2× PRESCRIPTION. Please provide the missing document(s) and resubmit.
+
+────────────────────────────────────────────────────────────
+[TC002] Unreadable Document
+────────────────────────────────────────────────────────────
+13:03:17 | INFO     | claims.pipeline.graph            | [DC4662C9] Pipeline started — member=EMP004 category=PHARMACY amount=₹800.00 docs=2 simulate_failure=False
+13:03:17 | DEBUG    | claims.pipeline.graph            | [DC4662C9] → entering node: DataValidatorAgent
+13:03:17 | INFO     | claims.agents.data_validator     | [DC4662C9] Starting — member=EMP004 category=PHARMACY amount=₹800.00 docs=2
+13:03:17 | DEBUG    | claims.agents.data_validator     | [DC4662C9] PASS policy_id — PLUM_GHI_2024
+13:03:17 | INFO     | claims.agents.data_validator     | [DC4662C9] PASS member_lookup — 'Sneha Reddy' (joined 2024-04-01)
+13:03:17 | INFO     | claims.agents.data_validator     | [DC4662C9] PASS policy_period — treatment 2024-10-25 within [2024-04-01, 2025-03-31]
+13:03:17 | DEBUG    | claims.agents.data_validator     | [DC4662C9] PASS category — PHARMACY
+13:03:17 | DEBUG    | claims.agents.data_validator     | [DC4662C9] PASS minimum_amount — ₹800.00 ≥ ₹500
+13:03:17 | INFO     | claims.agents.data_validator     | [DC4662C9] Complete — all checks passed
+13:03:17 | DEBUG    | claims.pipeline.graph            | [DC4662C9] ← exiting node: DataValidatorAgent
+13:03:17 | DEBUG    | claims.pipeline.graph            | [DC4662C9] → entering node: DocParserAgent
+13:03:17 | INFO     | claims.agents.doc_parser         | [DC4662C9] Starting — parsing 2 document(s)
+13:03:17 | WARNING  | claims.agents.doc_parser         | [DC4662C9] No content or file_data for PRESCRIPTION (file_id=F003) — skipping
+13:03:17 | WARNING  | claims.agents.doc_parser         | [DC4662C9] UNREADABLE PHARMACY_BILL (file_id=F004) — member must re-upload
+13:03:17 | INFO     | claims.agents.doc_parser         | [DC4662C9] Complete — 2 extracted, 0 failed, confidence=0.75
+13:03:17 | DEBUG    | claims.pipeline.graph            | [DC4662C9] ← exiting node: DocParserAgent
+13:03:17 | DEBUG    | claims.pipeline.graph            | [DC4662C9] → entering node: DocValidatorAgent
+13:03:17 | INFO     | claims.agents.doc_validator      | [DC4662C9] Starting — category=PHARMACY docs=2
+13:03:17 | WARNING  | claims.agents.doc_validator      | [DC4662C9] Unreadable documents detected: PHARMACY_BILL (file: blurry_bill.jpg)
+13:03:17 | WARNING  | claims.agents.doc_validator      | [DC4662C9] HALT [doc_quality] — The following document(s) could not be read: PHARMACY_BILL (file: blurry_bill.jpg). Please re-upload a clear, well-lit photo or scan of each.
+13:03:17 | DEBUG    | claims.pipeline.graph            | [DC4662C9] ← exiting node: DocValidatorAgent
+13:03:17 | WARNING  | claims.pipeline.graph            | [DC4662C9] Pipeline halted early — reason: The following document(s) could not be read: PHARMACY_BILL (file: blurry_bill.jpg). Please re-upload a clear, well-lit photo or scan of each.
+
+────────────────────────────────────────────────────────────
+[TC003] Documents Belong to Different Patients
+────────────────────────────────────────────────────────────
+13:03:17 | INFO     | claims.pipeline.graph            | [1D1CD9F2] Pipeline started — member=EMP001 category=CONSULTATION amount=₹1500.00 docs=2 simulate_failure=False
+13:03:17 | DEBUG    | claims.pipeline.graph            | [1D1CD9F2] → entering node: DataValidatorAgent
+13:03:17 | INFO     | claims.agents.data_validator     | [1D1CD9F2] Starting — member=EMP001 category=CONSULTATION amount=₹1500.00 docs=2
+13:03:17 | DEBUG    | claims.agents.data_validator     | [1D1CD9F2] PASS policy_id — PLUM_GHI_2024
+13:03:17 | INFO     | claims.agents.data_validator     | [1D1CD9F2] PASS member_lookup — 'Rajesh Kumar' (joined 2024-04-01)
+13:03:17 | INFO     | claims.agents.data_validator     | [1D1CD9F2] PASS policy_period — treatment 2024-11-01 within [2024-04-01, 2025-03-31]
+13:03:17 | DEBUG    | claims.agents.data_validator     | [1D1CD9F2] PASS category — CONSULTATION
+13:03:17 | DEBUG    | claims.agents.data_validator     | [1D1CD9F2] PASS minimum_amount — ₹1500.00 ≥ ₹500
+13:03:17 | INFO     | claims.agents.data_validator     | [1D1CD9F2] Complete — all checks passed
+13:03:17 | DEBUG    | claims.pipeline.graph            | [1D1CD9F2] ← exiting node: DataValidatorAgent
+13:03:17 | DEBUG    | claims.pipeline.graph            | [1D1CD9F2] → entering node: DocParserAgent
+13:03:17 | INFO     | claims.agents.doc_parser         | [1D1CD9F2] Starting — parsing 2 document(s)
+13:03:17 | WARNING  | claims.agents.doc_parser         | [1D1CD9F2] No content or file_data for PRESCRIPTION (file_id=F005) — skipping
+13:03:17 | WARNING  | claims.agents.doc_parser         | [1D1CD9F2] No content or file_data for HOSPITAL_BILL (file_id=F006) — skipping
+13:03:17 | INFO     | claims.agents.doc_parser         | [1D1CD9F2] Complete — 2 extracted, 0 failed, confidence=0.80
+13:03:17 | DEBUG    | claims.pipeline.graph            | [1D1CD9F2] ← exiting node: DocParserAgent
+13:03:17 | DEBUG    | claims.pipeline.graph            | [1D1CD9F2] → entering node: DocValidatorAgent
+13:03:17 | INFO     | claims.agents.doc_validator      | [1D1CD9F2] Starting — category=CONSULTATION docs=2
+13:03:17 | DEBUG    | claims.agents.doc_validator      | [1D1CD9F2] Required types: ['PRESCRIPTION', 'HOSPITAL_BILL'] | Uploaded: {'PRESCRIPTION': 1, 'HOSPITAL_BILL': 1}
+13:03:17 | INFO     | claims.agents.doc_validator      | [1D1CD9F2] PASS doc_types — all required docs present: PRESCRIPTION, HOSPITAL_BILL
+13:03:17 | WARNING  | claims.agents.doc_validator      | [1D1CD9F2] Patient name mismatch across documents: PRESCRIPTION (F005): 'rajesh kumar'; HOSPITAL_BILL (F006): 'arjun mehta'
+13:03:17 | WARNING  | claims.agents.doc_validator      | [1D1CD9F2] HALT [patient_name_consistency] — Documents appear to belong to different patients: PRESCRIPTION (F005): 'rajesh kumar'; HOSPITAL_BILL (F006): 'arjun mehta'. All documents in a single claim must be for the same patient. Please review and resubmit with matching documents.
+13:03:17 | DEBUG    | claims.pipeline.graph            | [1D1CD9F2] ← exiting node: DocValidatorAgent
+13:03:17 | WARNING  | claims.pipeline.graph            | [1D1CD9F2] Pipeline halted early — reason: Documents appear to belong to different patients: PRESCRIPTION (F005): 'rajesh kumar'; HOSPITAL_BILL (F006): 'arjun mehta'. All documents in a single claim must be for the same patient. Please review and resubmit with matching documents.
+
+────────────────────────────────────────────────────────────
+[TC004] Clean Consultation — Full Approval
+────────────────────────────────────────────────────────────
+13:03:17 | INFO     | claims.pipeline.graph            | [F8405546] Pipeline started — member=EMP001 category=CONSULTATION amount=₹1500.00 docs=2 simulate_failure=False
+13:03:17 | DEBUG    | claims.pipeline.graph            | [F8405546] → entering node: DataValidatorAgent
+13:03:17 | INFO     | claims.agents.data_validator     | [F8405546] Starting — member=EMP001 category=CONSULTATION amount=₹1500.00 docs=2
+13:03:17 | DEBUG    | claims.agents.data_validator     | [F8405546] PASS policy_id — PLUM_GHI_2024
+13:03:17 | INFO     | claims.agents.data_validator     | [F8405546] PASS member_lookup — 'Rajesh Kumar' (joined 2024-04-01)
+13:03:17 | INFO     | claims.agents.data_validator     | [F8405546] PASS policy_period — treatment 2024-11-01 within [2024-04-01, 2025-03-31]
+13:03:17 | DEBUG    | claims.agents.data_validator     | [F8405546] PASS category — CONSULTATION
+13:03:17 | DEBUG    | claims.agents.data_validator     | [F8405546] PASS minimum_amount — ₹1500.00 ≥ ₹500
+13:03:17 | INFO     | claims.agents.data_validator     | [F8405546] Complete — all checks passed
+13:03:17 | DEBUG    | claims.pipeline.graph            | [F8405546] ← exiting node: DataValidatorAgent
+13:03:17 | DEBUG    | claims.pipeline.graph            | [F8405546] → entering node: DocParserAgent
+13:03:17 | INFO     | claims.agents.doc_parser         | [F8405546] Starting — parsing 2 document(s)
+13:03:17 | DEBUG    | claims.agents.doc_parser         | [F8405546] Parsing PRESCRIPTION (file_id=F007) from pre-supplied content
+13:03:17 | DEBUG    | claims.agents.doc_parser         | [F8405546] Extracted PRESCRIPTION — patient=Rajesh Kumar diagnosis=Viral Fever items=0
+13:03:17 | DEBUG    | claims.agents.doc_parser         | [F8405546] Parsing HOSPITAL_BILL (file_id=F008) from pre-supplied content
+13:03:17 | DEBUG    | claims.agents.doc_parser         | [F8405546] Extracted HOSPITAL_BILL — patient=Rajesh Kumar diagnosis=— items=3
+13:03:17 | INFO     | claims.agents.doc_parser         | [F8405546] Complete — 2 extracted, 0 failed, confidence=1.00
+13:03:17 | DEBUG    | claims.pipeline.graph            | [F8405546] ← exiting node: DocParserAgent
+13:03:17 | DEBUG    | claims.pipeline.graph            | [F8405546] → entering node: DocValidatorAgent
+13:03:17 | INFO     | claims.agents.doc_validator      | [F8405546] Starting — category=CONSULTATION docs=2
+13:03:17 | DEBUG    | claims.agents.doc_validator      | [F8405546] Required types: ['PRESCRIPTION', 'HOSPITAL_BILL'] | Uploaded: {'PRESCRIPTION': 1, 'HOSPITAL_BILL': 1}
+13:03:17 | INFO     | claims.agents.doc_validator      | [F8405546] PASS doc_types — all required docs present: PRESCRIPTION, HOSPITAL_BILL
+13:03:17 | INFO     | claims.agents.doc_validator      | [F8405546] PASS patient_name_consistency — all docs reference 'rajesh kumar'
+13:03:17 | INFO     | claims.agents.doc_validator      | [F8405546] Complete — all document checks passed
+13:03:17 | DEBUG    | claims.pipeline.graph            | [F8405546] ← exiting node: DocValidatorAgent
+13:03:17 | DEBUG    | claims.pipeline.graph            | [F8405546] → entering node: DecisionMakerAgent
+13:03:17 | INFO     | claims.agents.decision_maker     | [F8405546] Starting — category=CONSULTATION amount=₹1500.00 diagnosis=Viral Fever hospital=City Clinic, Bengaluru
+13:03:17 | DEBUG    | claims.agents.decision_maker     | [F8405546] Calling Gemini for exclusion check — diagnosis='Viral Fever' treatment='—'
+13:03:23 | DEBUG    | claims.agents.decision_maker     | [F8405546] PASS exclusion_check — Viral fever is a common medical condition and is not listed in the policy exclusions provided.
+13:03:23 | DEBUG    | claims.agents.decision_maker     | [F8405546] Calling Gemini for waiting-period condition match — diagnosis='Viral Fever'
+13:03:25 | DEBUG    | claims.agents.decision_maker     | [F8405546] No specific waiting period matched — Viral fever is an acute, short-term illness and does not fall under the categories of chronic conditions or specific medical procedures listed in the waiting-period criteria.
+13:03:25 | INFO     | claims.agents.decision_maker     | [F8405546] Complete — decision=APPROVED approved=₹1350.00 confidence=1.00 network=NO
+13:03:25 | DEBUG    | claims.pipeline.graph            | [F8405546] ← exiting node: DecisionMakerAgent
+13:03:25 | INFO     | claims.pipeline.graph            | [F8405546] Pipeline complete — decision=APPROVED approved=₹1350.00 confidence=1.0000 failures=none
+
+────────────────────────────────────────────────────────────
+[TC005] Waiting Period — Diabetes
+────────────────────────────────────────────────────────────
+13:03:25 | INFO     | claims.pipeline.graph            | [2919B5DE] Pipeline started — member=EMP005 category=CONSULTATION amount=₹3000.00 docs=2 simulate_failure=False
+13:03:25 | DEBUG    | claims.pipeline.graph            | [2919B5DE] → entering node: DataValidatorAgent
+13:03:25 | INFO     | claims.agents.data_validator     | [2919B5DE] Starting — member=EMP005 category=CONSULTATION amount=₹3000.00 docs=2
+13:03:25 | DEBUG    | claims.agents.data_validator     | [2919B5DE] PASS policy_id — PLUM_GHI_2024
+13:03:25 | INFO     | claims.agents.data_validator     | [2919B5DE] PASS member_lookup — 'Vikram Joshi' (joined 2024-09-01)
+13:03:25 | INFO     | claims.agents.data_validator     | [2919B5DE] PASS policy_period — treatment 2024-10-15 within [2024-04-01, 2025-03-31]
+13:03:25 | DEBUG    | claims.agents.data_validator     | [2919B5DE] PASS category — CONSULTATION
+13:03:25 | DEBUG    | claims.agents.data_validator     | [2919B5DE] PASS minimum_amount — ₹3000.00 ≥ ₹500
+13:03:25 | INFO     | claims.agents.data_validator     | [2919B5DE] Complete — all checks passed
+13:03:25 | DEBUG    | claims.pipeline.graph            | [2919B5DE] ← exiting node: DataValidatorAgent
+13:03:25 | DEBUG    | claims.pipeline.graph            | [2919B5DE] → entering node: DocParserAgent
+13:03:25 | INFO     | claims.agents.doc_parser         | [2919B5DE] Starting — parsing 2 document(s)
+13:03:25 | DEBUG    | claims.agents.doc_parser         | [2919B5DE] Parsing PRESCRIPTION (file_id=F009) from pre-supplied content
+13:03:25 | DEBUG    | claims.agents.doc_parser         | [2919B5DE] Extracted PRESCRIPTION — patient=Vikram Joshi diagnosis=Type 2 Diabetes Mellitus items=0
+13:03:25 | DEBUG    | claims.agents.doc_parser         | [2919B5DE] Parsing HOSPITAL_BILL (file_id=F010) from pre-supplied content
+13:03:25 | DEBUG    | claims.agents.doc_parser         | [2919B5DE] Extracted HOSPITAL_BILL — patient=Vikram Joshi diagnosis=— items=0
+13:03:25 | INFO     | claims.agents.doc_parser         | [2919B5DE] Complete — 2 extracted, 0 failed, confidence=1.00
+13:03:25 | DEBUG    | claims.pipeline.graph            | [2919B5DE] ← exiting node: DocParserAgent
+13:03:25 | DEBUG    | claims.pipeline.graph            | [2919B5DE] → entering node: DocValidatorAgent
+13:03:25 | INFO     | claims.agents.doc_validator      | [2919B5DE] Starting — category=CONSULTATION docs=2
+13:03:25 | DEBUG    | claims.agents.doc_validator      | [2919B5DE] Required types: ['PRESCRIPTION', 'HOSPITAL_BILL'] | Uploaded: {'PRESCRIPTION': 1, 'HOSPITAL_BILL': 1}
+13:03:25 | INFO     | claims.agents.doc_validator      | [2919B5DE] PASS doc_types — all required docs present: PRESCRIPTION, HOSPITAL_BILL
+13:03:25 | INFO     | claims.agents.doc_validator      | [2919B5DE] PASS patient_name_consistency — all docs reference 'vikram joshi'
+13:03:25 | INFO     | claims.agents.doc_validator      | [2919B5DE] Complete — all document checks passed
+13:03:25 | DEBUG    | claims.pipeline.graph            | [2919B5DE] ← exiting node: DocValidatorAgent
+13:03:25 | DEBUG    | claims.pipeline.graph            | [2919B5DE] → entering node: DecisionMakerAgent
+13:03:25 | INFO     | claims.agents.decision_maker     | [2919B5DE] Starting — category=CONSULTATION amount=₹3000.00 diagnosis=Type 2 Diabetes Mellitus hospital=—
+13:03:25 | DEBUG    | claims.agents.decision_maker     | [2919B5DE] Calling Gemini for exclusion check — diagnosis='Type 2 Diabetes Mellitus' treatment='—'
+13:03:26 | DEBUG    | claims.agents.decision_maker     | [2919B5DE] PASS exclusion_check — Type 2 Diabetes Mellitus does not fall under any of the listed policy exclusions.
+13:03:26 | DEBUG    | claims.agents.decision_maker     | [2919B5DE] Calling Gemini for waiting-period condition match — diagnosis='Type 2 Diabetes Mellitus'
+13:03:28 | DEBUG    | claims.agents.decision_maker     | [2919B5DE] Waiting period match — condition='diabetes' days=90 days_since_join=44
+13:03:28 | WARNING  | claims.agents.decision_maker     | [2919B5DE] REJECTED — waiting period: Claim for 'diabetes' is within the 90-day waiting period. Member joined 2024-09-01; eligible for diabetes claims from 2024-11-30.
+13:03:28 | DEBUG    | claims.pipeline.graph            | [2919B5DE] ← exiting node: DecisionMakerAgent
+13:03:28 | INFO     | claims.pipeline.graph            | [2919B5DE] Pipeline complete — decision=REJECTED approved=₹— confidence=1.0000 failures=none
+
+────────────────────────────────────────────────────────────
+[TC006] Dental Partial Approval — Cosmetic Exclusion
+────────────────────────────────────────────────────────────
+13:03:28 | INFO     | claims.pipeline.graph            | [033AA9BD] Pipeline started — member=EMP002 category=DENTAL amount=₹12000.00 docs=1 simulate_failure=False
+13:03:28 | DEBUG    | claims.pipeline.graph            | [033AA9BD] → entering node: DataValidatorAgent
+13:03:28 | INFO     | claims.agents.data_validator     | [033AA9BD] Starting — member=EMP002 category=DENTAL amount=₹12000.00 docs=1
+13:03:28 | DEBUG    | claims.agents.data_validator     | [033AA9BD] PASS policy_id — PLUM_GHI_2024
+13:03:28 | INFO     | claims.agents.data_validator     | [033AA9BD] PASS member_lookup — 'Priya Singh' (joined 2024-04-01)
+13:03:28 | INFO     | claims.agents.data_validator     | [033AA9BD] PASS policy_period — treatment 2024-10-15 within [2024-04-01, 2025-03-31]
+13:03:28 | DEBUG    | claims.agents.data_validator     | [033AA9BD] PASS category — DENTAL
+13:03:28 | DEBUG    | claims.agents.data_validator     | [033AA9BD] PASS minimum_amount — ₹12000.00 ≥ ₹500
+13:03:28 | INFO     | claims.agents.data_validator     | [033AA9BD] Complete — all checks passed
+13:03:28 | DEBUG    | claims.pipeline.graph            | [033AA9BD] ← exiting node: DataValidatorAgent
+13:03:28 | DEBUG    | claims.pipeline.graph            | [033AA9BD] → entering node: DocParserAgent
+13:03:28 | INFO     | claims.agents.doc_parser         | [033AA9BD] Starting — parsing 1 document(s)
+13:03:28 | DEBUG    | claims.agents.doc_parser         | [033AA9BD] Parsing HOSPITAL_BILL (file_id=F011) from pre-supplied content
+13:03:28 | DEBUG    | claims.agents.doc_parser         | [033AA9BD] Extracted HOSPITAL_BILL — patient=Priya Singh diagnosis=— items=2
+13:03:28 | INFO     | claims.agents.doc_parser         | [033AA9BD] Complete — 1 extracted, 0 failed, confidence=1.00
+13:03:28 | DEBUG    | claims.pipeline.graph            | [033AA9BD] ← exiting node: DocParserAgent
+13:03:28 | DEBUG    | claims.pipeline.graph            | [033AA9BD] → entering node: DocValidatorAgent
+13:03:28 | INFO     | claims.agents.doc_validator      | [033AA9BD] Starting — category=DENTAL docs=1
+13:03:28 | DEBUG    | claims.agents.doc_validator      | [033AA9BD] Required types: ['HOSPITAL_BILL'] | Uploaded: {'HOSPITAL_BILL': 1}
+13:03:28 | INFO     | claims.agents.doc_validator      | [033AA9BD] PASS doc_types — all required docs present: HOSPITAL_BILL
+13:03:28 | INFO     | claims.agents.doc_validator      | [033AA9BD] Complete — all document checks passed
+13:03:28 | DEBUG    | claims.pipeline.graph            | [033AA9BD] ← exiting node: DocValidatorAgent
+13:03:28 | DEBUG    | claims.pipeline.graph            | [033AA9BD] → entering node: DecisionMakerAgent
+13:03:28 | INFO     | claims.agents.decision_maker     | [033AA9BD] Starting — category=DENTAL amount=₹12000.00 diagnosis=— hospital=Smile Dental Clinic
+13:03:28 | INFO     | claims.agents.decision_maker     | [033AA9BD] Complete — decision=PARTIAL approved=₹8000.00 confidence=1.00 network=NO
+13:03:28 | DEBUG    | claims.pipeline.graph            | [033AA9BD] ← exiting node: DecisionMakerAgent
+13:03:28 | INFO     | claims.pipeline.graph            | [033AA9BD] Pipeline complete — decision=PARTIAL approved=₹8000.00 confidence=1.0000 failures=none
+
+────────────────────────────────────────────────────────────
+[TC007] MRI Without Pre-Authorization
+────────────────────────────────────────────────────────────
+13:03:28 | INFO     | claims.pipeline.graph            | [B9E63344] Pipeline started — member=EMP007 category=DIAGNOSTIC amount=₹15000.00 docs=3 simulate_failure=False
+13:03:28 | DEBUG    | claims.pipeline.graph            | [B9E63344] → entering node: DataValidatorAgent
+13:03:28 | INFO     | claims.agents.data_validator     | [B9E63344] Starting — member=EMP007 category=DIAGNOSTIC amount=₹15000.00 docs=3
+13:03:28 | DEBUG    | claims.agents.data_validator     | [B9E63344] PASS policy_id — PLUM_GHI_2024
+13:03:28 | INFO     | claims.agents.data_validator     | [B9E63344] PASS member_lookup — 'Suresh Patil' (joined 2024-04-01)
+13:03:28 | INFO     | claims.agents.data_validator     | [B9E63344] PASS policy_period — treatment 2024-11-02 within [2024-04-01, 2025-03-31]
+13:03:28 | DEBUG    | claims.agents.data_validator     | [B9E63344] PASS category — DIAGNOSTIC
+13:03:28 | DEBUG    | claims.agents.data_validator     | [B9E63344] PASS minimum_amount — ₹15000.00 ≥ ₹500
+13:03:28 | INFO     | claims.agents.data_validator     | [B9E63344] Complete — all checks passed
+13:03:28 | DEBUG    | claims.pipeline.graph            | [B9E63344] ← exiting node: DataValidatorAgent
+13:03:28 | DEBUG    | claims.pipeline.graph            | [B9E63344] → entering node: DocParserAgent
+13:03:28 | INFO     | claims.agents.doc_parser         | [B9E63344] Starting — parsing 3 document(s)
+13:03:28 | DEBUG    | claims.agents.doc_parser         | [B9E63344] Parsing PRESCRIPTION (file_id=F012) from pre-supplied content
+13:03:28 | DEBUG    | claims.agents.doc_parser         | [B9E63344] Extracted PRESCRIPTION — patient=— diagnosis=Suspected Lumbar Disc Herniation items=0
+13:03:28 | DEBUG    | claims.agents.doc_parser         | [B9E63344] Parsing LAB_REPORT (file_id=F013) from pre-supplied content
+13:03:28 | DEBUG    | claims.agents.doc_parser         | [B9E63344] Extracted LAB_REPORT — patient=— diagnosis=— items=0
+13:03:28 | DEBUG    | claims.agents.doc_parser         | [B9E63344] Parsing HOSPITAL_BILL (file_id=F014) from pre-supplied content
+13:03:28 | DEBUG    | claims.agents.doc_parser         | [B9E63344] Extracted HOSPITAL_BILL — patient=— diagnosis=— items=1
+13:03:28 | INFO     | claims.agents.doc_parser         | [B9E63344] Complete — 3 extracted, 0 failed, confidence=1.00
+13:03:28 | DEBUG    | claims.pipeline.graph            | [B9E63344] ← exiting node: DocParserAgent
+13:03:28 | DEBUG    | claims.pipeline.graph            | [B9E63344] → entering node: DocValidatorAgent
+13:03:28 | INFO     | claims.agents.doc_validator      | [B9E63344] Starting — category=DIAGNOSTIC docs=3
+13:03:28 | DEBUG    | claims.agents.doc_validator      | [B9E63344] Required types: ['PRESCRIPTION', 'LAB_REPORT', 'HOSPITAL_BILL'] | Uploaded: {'PRESCRIPTION': 1, 'LAB_REPORT': 1, 'HOSPITAL_BILL': 1}
+13:03:28 | INFO     | claims.agents.doc_validator      | [B9E63344] PASS doc_types — all required docs present: PRESCRIPTION, LAB_REPORT, HOSPITAL_BILL
+13:03:28 | INFO     | claims.agents.doc_validator      | [B9E63344] Complete — all document checks passed
+13:03:28 | DEBUG    | claims.pipeline.graph            | [B9E63344] ← exiting node: DocValidatorAgent
+13:03:28 | DEBUG    | claims.pipeline.graph            | [B9E63344] → entering node: DecisionMakerAgent
+13:03:28 | INFO     | claims.agents.decision_maker     | [B9E63344] Starting — category=DIAGNOSTIC amount=₹15000.00 diagnosis=Suspected Lumbar Disc Herniation hospital=—
+13:03:28 | DEBUG    | claims.agents.decision_maker     | [B9E63344] Calling Gemini for exclusion check — diagnosis='Suspected Lumbar Disc Herniation' treatment='—'
+13:03:30 | DEBUG    | claims.agents.decision_maker     | [B9E63344] PASS exclusion_check — A lumbar disc herniation is a standard medical condition that does not fall under any of the listed exclusions such as self-inflicted injuries, elective cosmetic procedures, or specific excluded treatments like substance abuse or bariatric surgery.
+13:03:30 | DEBUG    | claims.agents.decision_maker     | [B9E63344] Calling Gemini for waiting-period condition match — diagnosis='Suspected Lumbar Disc Herniation'
+13:03:31 | DEBUG    | claims.agents.decision_maker     | [B9E63344] No specific waiting period matched — Lumbar disc herniation involves spinal discs, which is distinct from an abdominal or inguinal hernia (the type of hernia typically covered by such condition lists).
+13:03:31 | WARNING  | claims.agents.decision_maker     | [B9E63344] REJECTED — pre-auth required for ['MRI Lumbar Spine'] ₹15000.00
+13:03:31 | DEBUG    | claims.pipeline.graph            | [B9E63344] ← exiting node: DecisionMakerAgent
+13:03:31 | INFO     | claims.pipeline.graph            | [B9E63344] Pipeline complete — decision=REJECTED approved=₹— confidence=1.0000 failures=none
+
+────────────────────────────────────────────────────────────
+[TC008] Per-Claim Limit Exceeded
+────────────────────────────────────────────────────────────
+13:03:31 | INFO     | claims.pipeline.graph            | [AF3FDCB4] Pipeline started — member=EMP003 category=CONSULTATION amount=₹7500.00 docs=2 simulate_failure=False
+13:03:31 | DEBUG    | claims.pipeline.graph            | [AF3FDCB4] → entering node: DataValidatorAgent
+13:03:31 | INFO     | claims.agents.data_validator     | [AF3FDCB4] Starting — member=EMP003 category=CONSULTATION amount=₹7500.00 docs=2
+13:03:31 | DEBUG    | claims.agents.data_validator     | [AF3FDCB4] PASS policy_id — PLUM_GHI_2024
+13:03:31 | INFO     | claims.agents.data_validator     | [AF3FDCB4] PASS member_lookup — 'Amit Verma' (joined 2024-04-01)
+13:03:31 | INFO     | claims.agents.data_validator     | [AF3FDCB4] PASS policy_period — treatment 2024-10-20 within [2024-04-01, 2025-03-31]
+13:03:31 | DEBUG    | claims.agents.data_validator     | [AF3FDCB4] PASS category — CONSULTATION
+13:03:31 | DEBUG    | claims.agents.data_validator     | [AF3FDCB4] PASS minimum_amount — ₹7500.00 ≥ ₹500
+13:03:31 | INFO     | claims.agents.data_validator     | [AF3FDCB4] Complete — all checks passed
+13:03:31 | DEBUG    | claims.pipeline.graph            | [AF3FDCB4] ← exiting node: DataValidatorAgent
+13:03:31 | DEBUG    | claims.pipeline.graph            | [AF3FDCB4] → entering node: DocParserAgent
+13:03:31 | INFO     | claims.agents.doc_parser         | [AF3FDCB4] Starting — parsing 2 document(s)
+13:03:31 | DEBUG    | claims.agents.doc_parser         | [AF3FDCB4] Parsing PRESCRIPTION (file_id=F015) from pre-supplied content
+13:03:31 | DEBUG    | claims.agents.doc_parser         | [AF3FDCB4] Extracted PRESCRIPTION — patient=— diagnosis=Gastroenteritis items=0
+13:03:31 | DEBUG    | claims.agents.doc_parser         | [AF3FDCB4] Parsing HOSPITAL_BILL (file_id=F016) from pre-supplied content
+13:03:31 | DEBUG    | claims.agents.doc_parser         | [AF3FDCB4] Extracted HOSPITAL_BILL — patient=— diagnosis=— items=2
+13:03:31 | INFO     | claims.agents.doc_parser         | [AF3FDCB4] Complete — 2 extracted, 0 failed, confidence=1.00
+13:03:31 | DEBUG    | claims.pipeline.graph            | [AF3FDCB4] ← exiting node: DocParserAgent
+13:03:31 | DEBUG    | claims.pipeline.graph            | [AF3FDCB4] → entering node: DocValidatorAgent
+13:03:31 | INFO     | claims.agents.doc_validator      | [AF3FDCB4] Starting — category=CONSULTATION docs=2
+13:03:31 | DEBUG    | claims.agents.doc_validator      | [AF3FDCB4] Required types: ['PRESCRIPTION', 'HOSPITAL_BILL'] | Uploaded: {'PRESCRIPTION': 1, 'HOSPITAL_BILL': 1}
+13:03:31 | INFO     | claims.agents.doc_validator      | [AF3FDCB4] PASS doc_types — all required docs present: PRESCRIPTION, HOSPITAL_BILL
+13:03:31 | INFO     | claims.agents.doc_validator      | [AF3FDCB4] Complete — all document checks passed
+13:03:31 | DEBUG    | claims.pipeline.graph            | [AF3FDCB4] ← exiting node: DocValidatorAgent
+13:03:31 | DEBUG    | claims.pipeline.graph            | [AF3FDCB4] → entering node: DecisionMakerAgent
+13:03:31 | INFO     | claims.agents.decision_maker     | [AF3FDCB4] Starting — category=CONSULTATION amount=₹7500.00 diagnosis=Gastroenteritis hospital=—
+13:03:31 | DEBUG    | claims.agents.decision_maker     | [AF3FDCB4] Calling Gemini for exclusion check — diagnosis='Gastroenteritis' treatment='—'
+13:03:32 | DEBUG    | claims.agents.decision_maker     | [AF3FDCB4] PASS exclusion_check — Gastroenteritis is a common medical condition and is not listed among the specified policy exclusions.
+13:03:32 | DEBUG    | claims.agents.decision_maker     | [AF3FDCB4] Calling Gemini for waiting-period condition match — diagnosis='Gastroenteritis'
+13:03:34 | DEBUG    | claims.agents.decision_maker     | [AF3FDCB4] No specific waiting period matched — Gastroenteritis is an acute gastrointestinal infection and does not fall under any of the listed chronic conditions or specified waiting-period categories such as diabetes, hypertension, or maternity.
+13:03:34 | WARNING  | claims.agents.decision_maker     | [AF3FDCB4] REJECTED — per-claim limit: ₹7500.00 > ₹5000.00
+13:03:34 | DEBUG    | claims.pipeline.graph            | [AF3FDCB4] ← exiting node: DecisionMakerAgent
+13:03:34 | INFO     | claims.pipeline.graph            | [AF3FDCB4] Pipeline complete — decision=REJECTED approved=₹— confidence=1.0000 failures=none
+
+────────────────────────────────────────────────────────────
+[TC009] Fraud Signal — Multiple Same-Day Claims
+────────────────────────────────────────────────────────────
+13:03:34 | INFO     | claims.pipeline.graph            | [5C482387] Pipeline started — member=EMP008 category=CONSULTATION amount=₹4800.00 docs=2 simulate_failure=False
+13:03:34 | DEBUG    | claims.pipeline.graph            | [5C482387] → entering node: DataValidatorAgent
+13:03:34 | INFO     | claims.agents.data_validator     | [5C482387] Starting — member=EMP008 category=CONSULTATION amount=₹4800.00 docs=2
+13:03:34 | DEBUG    | claims.agents.data_validator     | [5C482387] PASS policy_id — PLUM_GHI_2024
+13:03:34 | INFO     | claims.agents.data_validator     | [5C482387] PASS member_lookup — 'Ravi Menon' (joined 2024-04-01)
+13:03:34 | INFO     | claims.agents.data_validator     | [5C482387] PASS policy_period — treatment 2024-10-30 within [2024-04-01, 2025-03-31]
+13:03:34 | DEBUG    | claims.agents.data_validator     | [5C482387] PASS category — CONSULTATION
+13:03:34 | DEBUG    | claims.agents.data_validator     | [5C482387] PASS minimum_amount — ₹4800.00 ≥ ₹500
+13:03:34 | INFO     | claims.agents.data_validator     | [5C482387] Complete — all checks passed
+13:03:34 | DEBUG    | claims.pipeline.graph            | [5C482387] ← exiting node: DataValidatorAgent
+13:03:34 | DEBUG    | claims.pipeline.graph            | [5C482387] → entering node: DocParserAgent
+13:03:34 | INFO     | claims.agents.doc_parser         | [5C482387] Starting — parsing 2 document(s)
+13:03:34 | DEBUG    | claims.agents.doc_parser         | [5C482387] Parsing PRESCRIPTION (file_id=F017) from pre-supplied content
+13:03:34 | DEBUG    | claims.agents.doc_parser         | [5C482387] Extracted PRESCRIPTION — patient=— diagnosis=Migraine items=0
+13:03:34 | DEBUG    | claims.agents.doc_parser         | [5C482387] Parsing HOSPITAL_BILL (file_id=F018) from pre-supplied content
+13:03:34 | DEBUG    | claims.agents.doc_parser         | [5C482387] Extracted HOSPITAL_BILL — patient=— diagnosis=— items=0
+13:03:34 | INFO     | claims.agents.doc_parser         | [5C482387] Complete — 2 extracted, 0 failed, confidence=1.00
+13:03:34 | DEBUG    | claims.pipeline.graph            | [5C482387] ← exiting node: DocParserAgent
+13:03:34 | DEBUG    | claims.pipeline.graph            | [5C482387] → entering node: DocValidatorAgent
+13:03:34 | INFO     | claims.agents.doc_validator      | [5C482387] Starting — category=CONSULTATION docs=2
+13:03:34 | DEBUG    | claims.agents.doc_validator      | [5C482387] Required types: ['PRESCRIPTION', 'HOSPITAL_BILL'] | Uploaded: {'PRESCRIPTION': 1, 'HOSPITAL_BILL': 1}
+13:03:34 | INFO     | claims.agents.doc_validator      | [5C482387] PASS doc_types — all required docs present: PRESCRIPTION, HOSPITAL_BILL
+13:03:34 | INFO     | claims.agents.doc_validator      | [5C482387] Complete — all document checks passed
+13:03:34 | DEBUG    | claims.pipeline.graph            | [5C482387] ← exiting node: DocValidatorAgent
+13:03:34 | DEBUG    | claims.pipeline.graph            | [5C482387] → entering node: DecisionMakerAgent
+13:03:34 | INFO     | claims.agents.decision_maker     | [5C482387] Starting — category=CONSULTATION amount=₹4800.00 diagnosis=Migraine hospital=—
+13:03:34 | WARNING  | claims.agents.decision_maker     | [5C482387] Fraud signal — same-day: Member has 3 prior claim(s) on 2024-10-30 (limit: 2)
+13:03:34 | WARNING  | claims.agents.decision_maker     | [5C482387] Routing to MANUAL_REVIEW — 1 signal(s) triggered
+13:03:34 | DEBUG    | claims.pipeline.graph            | [5C482387] ← exiting node: DecisionMakerAgent
+13:03:34 | INFO     | claims.pipeline.graph            | [5C482387] Pipeline complete — decision=MANUAL_REVIEW approved=₹— confidence=1.0000 failures=none
+
+────────────────────────────────────────────────────────────
+[TC010] Network Hospital — Discount Applied
+────────────────────────────────────────────────────────────
+13:03:34 | INFO     | claims.pipeline.graph            | [A09237F5] Pipeline started — member=EMP010 category=CONSULTATION amount=₹4500.00 docs=2 simulate_failure=False
+13:03:34 | DEBUG    | claims.pipeline.graph            | [A09237F5] → entering node: DataValidatorAgent
+13:03:34 | INFO     | claims.agents.data_validator     | [A09237F5] Starting — member=EMP010 category=CONSULTATION amount=₹4500.00 docs=2
+13:03:34 | DEBUG    | claims.agents.data_validator     | [A09237F5] PASS policy_id — PLUM_GHI_2024
+13:03:34 | INFO     | claims.agents.data_validator     | [A09237F5] PASS member_lookup — 'Deepak Shah' (joined 2024-04-01)
+13:03:34 | INFO     | claims.agents.data_validator     | [A09237F5] PASS policy_period — treatment 2024-11-03 within [2024-04-01, 2025-03-31]
+13:03:34 | DEBUG    | claims.agents.data_validator     | [A09237F5] PASS category — CONSULTATION
+13:03:34 | DEBUG    | claims.agents.data_validator     | [A09237F5] PASS minimum_amount — ₹4500.00 ≥ ₹500
+13:03:34 | INFO     | claims.agents.data_validator     | [A09237F5] Complete — all checks passed
+13:03:34 | DEBUG    | claims.pipeline.graph            | [A09237F5] ← exiting node: DataValidatorAgent
+13:03:34 | DEBUG    | claims.pipeline.graph            | [A09237F5] → entering node: DocParserAgent
+13:03:34 | INFO     | claims.agents.doc_parser         | [A09237F5] Starting — parsing 2 document(s)
+13:03:34 | DEBUG    | claims.agents.doc_parser         | [A09237F5] Parsing PRESCRIPTION (file_id=F019) from pre-supplied content
+13:03:34 | DEBUG    | claims.agents.doc_parser         | [A09237F5] Extracted PRESCRIPTION — patient=Deepak Shah diagnosis=Acute Bronchitis items=0
+13:03:34 | DEBUG    | claims.agents.doc_parser         | [A09237F5] Parsing HOSPITAL_BILL (file_id=F020) from pre-supplied content
+13:03:34 | DEBUG    | claims.agents.doc_parser         | [A09237F5] Extracted HOSPITAL_BILL — patient=Deepak Shah diagnosis=— items=2
+13:03:34 | INFO     | claims.agents.doc_parser         | [A09237F5] Complete — 2 extracted, 0 failed, confidence=1.00
+13:03:34 | DEBUG    | claims.pipeline.graph            | [A09237F5] ← exiting node: DocParserAgent
+13:03:34 | DEBUG    | claims.pipeline.graph            | [A09237F5] → entering node: DocValidatorAgent
+13:03:34 | INFO     | claims.agents.doc_validator      | [A09237F5] Starting — category=CONSULTATION docs=2
+13:03:34 | DEBUG    | claims.agents.doc_validator      | [A09237F5] Required types: ['PRESCRIPTION', 'HOSPITAL_BILL'] | Uploaded: {'PRESCRIPTION': 1, 'HOSPITAL_BILL': 1}
+13:03:34 | INFO     | claims.agents.doc_validator      | [A09237F5] PASS doc_types — all required docs present: PRESCRIPTION, HOSPITAL_BILL
+13:03:34 | INFO     | claims.agents.doc_validator      | [A09237F5] PASS patient_name_consistency — all docs reference 'deepak shah'
+13:03:34 | INFO     | claims.agents.doc_validator      | [A09237F5] Complete — all document checks passed
+13:03:34 | DEBUG    | claims.pipeline.graph            | [A09237F5] ← exiting node: DocValidatorAgent
+13:03:34 | DEBUG    | claims.pipeline.graph            | [A09237F5] → entering node: DecisionMakerAgent
+13:03:34 | INFO     | claims.agents.decision_maker     | [A09237F5] Starting — category=CONSULTATION amount=₹4500.00 diagnosis=Acute Bronchitis hospital=Apollo Hospitals
+13:03:34 | DEBUG    | claims.agents.decision_maker     | [A09237F5] Calling Gemini for exclusion check — diagnosis='Acute Bronchitis' treatment='—'
+13:03:35 | DEBUG    | claims.agents.decision_maker     | [A09237F5] PASS exclusion_check — Acute Bronchitis is a common medical condition and does not fall under any of the listed exclusions such as self-inflicted injuries, cosmetic procedures, or elective treatments.
+13:03:35 | DEBUG    | claims.agents.decision_maker     | [A09237F5] Calling Gemini for waiting-period condition match — diagnosis='Acute Bronchitis'
+13:03:37 | DEBUG    | claims.agents.decision_maker     | [A09237F5] No specific waiting period matched — Acute bronchitis is a short-term respiratory infection and does not fall under the listed chronic or elective conditions.
+13:03:37 | INFO     | claims.agents.decision_maker     | [A09237F5] Complete — decision=APPROVED approved=₹3240.00 confidence=1.00 network=YES
+13:03:37 | DEBUG    | claims.pipeline.graph            | [A09237F5] ← exiting node: DecisionMakerAgent
+13:03:37 | INFO     | claims.pipeline.graph            | [A09237F5] Pipeline complete — decision=APPROVED approved=₹3240.00 confidence=1.0000 failures=none
+
+────────────────────────────────────────────────────────────
+[TC011] Component Failure — Graceful Degradation
+────────────────────────────────────────────────────────────
+13:03:37 | INFO     | claims.pipeline.graph            | [BCAB69A2] Pipeline started — member=EMP006 category=ALTERNATIVE_MEDICINE amount=₹4000.00 docs=2 simulate_failure=True
+13:03:37 | DEBUG    | claims.pipeline.graph            | [BCAB69A2] → entering node: DataValidatorAgent
+13:03:37 | INFO     | claims.agents.data_validator     | [BCAB69A2] Starting — member=EMP006 category=ALTERNATIVE_MEDICINE amount=₹4000.00 docs=2
+13:03:37 | WARNING  | claims.agents.data_validator     | [BCAB69A2] Simulated component failure triggered — continuing degraded
+13:03:37 | DEBUG    | claims.pipeline.graph            | [BCAB69A2] ← exiting node: DataValidatorAgent
+13:03:37 | DEBUG    | claims.pipeline.graph            | [BCAB69A2] → entering node: DocParserAgent
+13:03:37 | INFO     | claims.agents.doc_parser         | [BCAB69A2] Starting — parsing 2 document(s)
+13:03:37 | DEBUG    | claims.agents.doc_parser         | [BCAB69A2] Parsing PRESCRIPTION (file_id=F021) from pre-supplied content
+13:03:37 | DEBUG    | claims.agents.doc_parser         | [BCAB69A2] Extracted PRESCRIPTION — patient=— diagnosis=Chronic Joint Pain items=0
+13:03:37 | DEBUG    | claims.agents.doc_parser         | [BCAB69A2] Parsing HOSPITAL_BILL (file_id=F022) from pre-supplied content
+13:03:37 | DEBUG    | claims.agents.doc_parser         | [BCAB69A2] Extracted HOSPITAL_BILL — patient=— diagnosis=— items=2
+13:03:37 | INFO     | claims.agents.doc_parser         | [BCAB69A2] Complete — 2 extracted, 0 failed, confidence=0.80
+13:03:37 | DEBUG    | claims.pipeline.graph            | [BCAB69A2] ← exiting node: DocParserAgent
+13:03:37 | DEBUG    | claims.pipeline.graph            | [BCAB69A2] → entering node: DocValidatorAgent
+13:03:37 | INFO     | claims.agents.doc_validator      | [BCAB69A2] Starting — category=ALTERNATIVE_MEDICINE docs=2
+13:03:37 | WARNING  | claims.agents.doc_validator      | [BCAB69A2] Simulated component failure triggered — skipping doc validation
+13:03:37 | DEBUG    | claims.pipeline.graph            | [BCAB69A2] ← exiting node: DocValidatorAgent
+13:03:37 | DEBUG    | claims.pipeline.graph            | [BCAB69A2] → entering node: DecisionMakerAgent
+13:03:37 | INFO     | claims.agents.decision_maker     | [BCAB69A2] Starting — category=ALTERNATIVE_MEDICINE amount=₹4000.00 diagnosis=Chronic Joint Pain hospital=Ayur Wellness Centre
+13:03:37 | DEBUG    | claims.agents.decision_maker     | [BCAB69A2] Calling Gemini for exclusion check — diagnosis='Chronic Joint Pain' treatment='Panchakarma Therapy'
+13:03:38 | DEBUG    | claims.agents.decision_maker     | [BCAB69A2] PASS exclusion_check — Panchakarma therapy is not explicitly listed in the provided policy exclusions, nor does it fall under the broad categories such as experimental treatments or cosmetic procedures based strictly on the provided list.
+13:03:38 | DEBUG    | claims.agents.decision_maker     | [BCAB69A2] Calling Gemini for waiting-period condition match — diagnosis='Chronic Joint Pain'
+13:03:40 | DEBUG    | claims.agents.decision_maker     | [BCAB69A2] No specific waiting period matched — Chronic joint pain does not fall under the specified waiting-period conditions like diabetes, hypertension, or joint replacement, and Panchakarma is an alternative therapy not listed as a condition.
+13:03:40 | INFO     | claims.agents.decision_maker     | [BCAB69A2] Complete — decision=APPROVED approved=₹4000.00 confidence=0.65 network=NO
+13:03:40 | DEBUG    | claims.pipeline.graph            | [BCAB69A2] ← exiting node: DecisionMakerAgent
+13:03:40 | INFO     | claims.pipeline.graph            | [BCAB69A2] Pipeline complete — decision=APPROVED approved=₹4000.00 confidence=0.6500 failures=['DataValidatorAgent', 'DocValidatorAgent']
+
+────────────────────────────────────────────────────────────
+[TC012] Excluded Treatment
+────────────────────────────────────────────────────────────
+13:03:40 | INFO     | claims.pipeline.graph            | [AABD17C6] Pipeline started — member=EMP009 category=CONSULTATION amount=₹8000.00 docs=2 simulate_failure=False
+13:03:40 | DEBUG    | claims.pipeline.graph            | [AABD17C6] → entering node: DataValidatorAgent
+13:03:40 | INFO     | claims.agents.data_validator     | [AABD17C6] Starting — member=EMP009 category=CONSULTATION amount=₹8000.00 docs=2
+13:03:40 | DEBUG    | claims.agents.data_validator     | [AABD17C6] PASS policy_id — PLUM_GHI_2024
+13:03:40 | INFO     | claims.agents.data_validator     | [AABD17C6] PASS member_lookup — 'Anita Desai' (joined 2024-04-01)
+13:03:40 | INFO     | claims.agents.data_validator     | [AABD17C6] PASS policy_period — treatment 2024-10-18 within [2024-04-01, 2025-03-31]
+13:03:40 | DEBUG    | claims.agents.data_validator     | [AABD17C6] PASS category — CONSULTATION
+13:03:40 | DEBUG    | claims.agents.data_validator     | [AABD17C6] PASS minimum_amount — ₹8000.00 ≥ ₹500
+13:03:40 | INFO     | claims.agents.data_validator     | [AABD17C6] Complete — all checks passed
+13:03:40 | DEBUG    | claims.pipeline.graph            | [AABD17C6] ← exiting node: DataValidatorAgent
+13:03:40 | DEBUG    | claims.pipeline.graph            | [AABD17C6] → entering node: DocParserAgent
+13:03:40 | INFO     | claims.agents.doc_parser         | [AABD17C6] Starting — parsing 2 document(s)
+13:03:40 | DEBUG    | claims.agents.doc_parser         | [AABD17C6] Parsing PRESCRIPTION (file_id=F023) from pre-supplied content
+13:03:40 | DEBUG    | claims.agents.doc_parser         | [AABD17C6] Extracted PRESCRIPTION — patient=— diagnosis=Morbid Obesity — BMI 37 items=0
+13:03:40 | DEBUG    | claims.agents.doc_parser         | [AABD17C6] Parsing HOSPITAL_BILL (file_id=F024) from pre-supplied content
+13:03:40 | DEBUG    | claims.agents.doc_parser         | [AABD17C6] Extracted HOSPITAL_BILL — patient=— diagnosis=— items=2
+13:03:40 | INFO     | claims.agents.doc_parser         | [AABD17C6] Complete — 2 extracted, 0 failed, confidence=1.00
+13:03:40 | DEBUG    | claims.pipeline.graph            | [AABD17C6] ← exiting node: DocParserAgent
+13:03:40 | DEBUG    | claims.pipeline.graph            | [AABD17C6] → entering node: DocValidatorAgent
+13:03:40 | INFO     | claims.agents.doc_validator      | [AABD17C6] Starting — category=CONSULTATION docs=2
+13:03:40 | DEBUG    | claims.agents.doc_validator      | [AABD17C6] Required types: ['PRESCRIPTION', 'HOSPITAL_BILL'] | Uploaded: {'PRESCRIPTION': 1, 'HOSPITAL_BILL': 1}
+13:03:40 | INFO     | claims.agents.doc_validator      | [AABD17C6] PASS doc_types — all required docs present: PRESCRIPTION, HOSPITAL_BILL
+13:03:40 | INFO     | claims.agents.doc_validator      | [AABD17C6] Complete — all document checks passed
+13:03:40 | DEBUG    | claims.pipeline.graph            | [AABD17C6] ← exiting node: DocValidatorAgent
+13:03:40 | DEBUG    | claims.pipeline.graph            | [AABD17C6] → entering node: DecisionMakerAgent
+13:03:40 | INFO     | claims.agents.decision_maker     | [AABD17C6] Starting — category=CONSULTATION amount=₹8000.00 diagnosis=Morbid Obesity — BMI 37 hospital=—
+13:03:40 | DEBUG    | claims.agents.decision_maker     | [AABD17C6] Calling Gemini for exclusion check — diagnosis='Morbid Obesity — BMI 37' treatment='Bariatric Consultation and Customised Diet Plan'
+13:03:41 | WARNING  | claims.agents.decision_maker     | [AABD17C6] EXCLUDED — matched: 'Obesity and weight loss programs'
+13:03:41 | DEBUG    | claims.pipeline.graph            | [AABD17C6] ← exiting node: DecisionMakerAgent
+13:03:41 | INFO     | claims.pipeline.graph            | [AABD17C6] Pipeline complete — decision=REJECTED approved=₹— confidence=1.0000 failures=none
+

@@ -1,0 +1,429 @@
+{
+  "version": "1.0",
+  "description": "Missing document artefacts implied by TC001-TC012. Each entry gives the exact target file path, the document type, the reusable prompt template to apply, and the seed fields that must appear in the generated document.",
+  "missing_artifact_count": 24,
+  "artifact_root": "data/test_case_missing_artifacts",
+  "artifacts": [
+    {
+      "case_id": "TC001",
+      "case_name": "Wrong Document Uploaded",
+      "target_path": "data/test_case_missing_artifacts/dr_sharma_prescription.jpg",
+      "actual_type": "PRESCRIPTION",
+      "quality": "GOOD",
+      "prompt_template_id": "prescription_wrong_doc",
+      "seed_fields": {},
+      "special_constraints": [
+        "Keep this as a valid prescription because the scenario depends on the member uploading the wrong document type."
+      ]
+    },
+    {
+      "case_id": "TC001",
+      "case_name": "Wrong Document Uploaded",
+      "target_path": "data/test_case_missing_artifacts/another_prescription.jpg",
+      "actual_type": "PRESCRIPTION",
+      "quality": "GOOD",
+      "prompt_template_id": "prescription_wrong_doc",
+      "seed_fields": {},
+      "special_constraints": [
+        "Keep this as a second valid prescription from a different consultation context so the upload contains two prescriptions and no bill."
+      ]
+    },
+    {
+      "case_id": "TC002",
+      "case_name": "Unreadable Document",
+      "target_path": "data/test_case_missing_artifacts/prescription.jpg",
+      "actual_type": "PRESCRIPTION",
+      "quality": "GOOD",
+      "prompt_template_id": "prescription_clean",
+      "seed_fields": {},
+      "special_constraints": []
+    },
+    {
+      "case_id": "TC002",
+      "case_name": "Unreadable Document",
+      "target_path": "data/test_case_missing_artifacts/blurry_bill.jpg",
+      "actual_type": "PHARMACY_BILL",
+      "quality": "UNREADABLE",
+      "prompt_template_id": "pharmacy_bill_unreadable",
+      "seed_fields": {},
+      "special_constraints": [
+        "The bill should still be identifiable as a pharmacy bill, but medically relevant text must be unreadable."
+      ]
+    },
+    {
+      "case_id": "TC003",
+      "case_name": "Documents Belong to Different Patients",
+      "target_path": "data/test_case_missing_artifacts/prescription_rajesh.jpg",
+      "actual_type": "PRESCRIPTION",
+      "quality": "GOOD",
+      "prompt_template_id": "prescription_mismatch_name",
+      "seed_fields": {
+        "patient_name": "Rajesh Kumar"
+      },
+      "special_constraints": [
+        "Patient name must remain Rajesh Kumar."
+      ]
+    },
+    {
+      "case_id": "TC003",
+      "case_name": "Documents Belong to Different Patients",
+      "target_path": "data/test_case_missing_artifacts/bill_arjun.jpg",
+      "actual_type": "HOSPITAL_BILL",
+      "quality": "GOOD",
+      "prompt_template_id": "hospital_bill_mismatch_name",
+      "seed_fields": {
+        "patient_name": "Arjun Mehta"
+      },
+      "special_constraints": [
+        "Patient name must remain Arjun Mehta."
+      ]
+    },
+    {
+      "case_id": "TC004",
+      "case_name": "Clean Consultation - Full Approval",
+      "target_path": "data/test_case_missing_artifacts/tc004_01_prescription_emp001.jpg",
+      "actual_type": "PRESCRIPTION",
+      "quality": "GOOD",
+      "prompt_template_id": "prescription_clean",
+      "seed_fields": {
+        "doctor_name": "Dr. Arun Sharma",
+        "doctor_registration": "KA/45678/2015",
+        "patient_name": "Rajesh Kumar",
+        "date": "2024-11-01",
+        "diagnosis": "Viral Fever",
+        "medicines": [
+          "Paracetamol 650mg",
+          "Vitamin C 500mg"
+        ]
+      },
+      "special_constraints": []
+    },
+    {
+      "case_id": "TC004",
+      "case_name": "Clean Consultation - Full Approval",
+      "target_path": "data/test_case_missing_artifacts/tc004_02_hospital_bill_emp001.png",
+      "actual_type": "HOSPITAL_BILL",
+      "quality": "GOOD",
+      "prompt_template_id": "hospital_bill_clean",
+      "seed_fields": {
+        "hospital_name": "City Clinic, Bengaluru",
+        "patient_name": "Rajesh Kumar",
+        "date": "2024-11-01",
+        "line_items": [
+          {
+            "description": "Consultation Fee",
+            "amount": 1000
+          },
+          {
+            "description": "CBC Test",
+            "amount": 300
+          },
+          {
+            "description": "Dengue NS1 Test",
+            "amount": 200
+          }
+        ],
+        "total": 1500
+      },
+      "special_constraints": []
+    },
+    {
+      "case_id": "TC005",
+      "case_name": "Waiting Period - Diabetes",
+      "target_path": "data/test_case_missing_artifacts/tc005_01_prescription_emp005.jpg",
+      "actual_type": "PRESCRIPTION",
+      "quality": "GOOD",
+      "prompt_template_id": "prescription_clean",
+      "seed_fields": {
+        "doctor_name": "Dr. Sunil Mehta",
+        "doctor_registration": "GJ/56789/2014",
+        "patient_name": "Vikram Joshi",
+        "diagnosis": "Type 2 Diabetes Mellitus",
+        "medicines": [
+          "Metformin 500mg",
+          "Glimepiride 1mg"
+        ]
+      },
+      "special_constraints": []
+    },
+    {
+      "case_id": "TC005",
+      "case_name": "Waiting Period - Diabetes",
+      "target_path": "data/test_case_missing_artifacts/tc005_02_hospital_bill_emp005.png",
+      "actual_type": "HOSPITAL_BILL",
+      "quality": "GOOD",
+      "prompt_template_id": "hospital_bill_clean",
+      "seed_fields": {
+        "patient_name": "Vikram Joshi",
+        "date": "2024-10-15",
+        "total": 3000
+      },
+      "special_constraints": [
+        "Use a simple consultation-style bill totaling exactly 3000.00."
+      ]
+    },
+    {
+      "case_id": "TC006",
+      "case_name": "Dental Partial Approval - Cosmetic Exclusion",
+      "target_path": "data/test_case_missing_artifacts/tc006_01_hospital_bill_emp002.png",
+      "actual_type": "HOSPITAL_BILL",
+      "quality": "GOOD",
+      "prompt_template_id": "hospital_bill_clean",
+      "seed_fields": {
+        "hospital_name": "Smile Dental Clinic",
+        "patient_name": "Priya Singh",
+        "line_items": [
+          {
+            "description": "Root Canal Treatment",
+            "amount": 8000
+          },
+          {
+            "description": "Teeth Whitening",
+            "amount": 4000
+          }
+        ],
+        "total": 12000
+      },
+      "special_constraints": [
+        "Keep both line items clearly itemized because the scenario depends on line-item adjudication."
+      ]
+    },
+    {
+      "case_id": "TC007",
+      "case_name": "MRI Without Pre-Authorization",
+      "target_path": "data/test_case_missing_artifacts/tc007_01_prescription_emp007.jpg",
+      "actual_type": "PRESCRIPTION",
+      "quality": "GOOD",
+      "prompt_template_id": "prescription_clean",
+      "seed_fields": {
+        "doctor_name": "Dr. Venkat Rao",
+        "doctor_registration": "AP/67890/2017",
+        "diagnosis": "Suspected Lumbar Disc Herniation",
+        "tests_ordered": [
+          "MRI Lumbar Spine"
+        ]
+      },
+      "special_constraints": []
+    },
+    {
+      "case_id": "TC007",
+      "case_name": "MRI Without Pre-Authorization",
+      "target_path": "data/test_case_missing_artifacts/tc007_02_lab_report_emp007.jpg",
+      "actual_type": "LAB_REPORT",
+      "quality": "GOOD",
+      "prompt_template_id": "lab_report_clean",
+      "seed_fields": {
+        "test_name": "MRI Lumbar Spine"
+      },
+      "special_constraints": [
+        "The report should clearly show MRI Lumbar Spine as the named test or study."
+      ]
+    },
+    {
+      "case_id": "TC007",
+      "case_name": "MRI Without Pre-Authorization",
+      "target_path": "data/test_case_missing_artifacts/tc007_03_hospital_bill_emp007.png",
+      "actual_type": "HOSPITAL_BILL",
+      "quality": "GOOD",
+      "prompt_template_id": "hospital_bill_clean",
+      "seed_fields": {
+        "line_items": [
+          {
+            "description": "MRI Lumbar Spine",
+            "amount": 15000
+          }
+        ],
+        "total": 15000
+      },
+      "special_constraints": []
+    },
+    {
+      "case_id": "TC008",
+      "case_name": "Per-Claim Limit Exceeded",
+      "target_path": "data/test_case_missing_artifacts/tc008_01_prescription_emp003.jpg",
+      "actual_type": "PRESCRIPTION",
+      "quality": "GOOD",
+      "prompt_template_id": "prescription_clean",
+      "seed_fields": {
+        "doctor_name": "Dr. R. Gupta",
+        "doctor_registration": "DL/34567/2016",
+        "diagnosis": "Gastroenteritis",
+        "medicines": [
+          "Antibiotics",
+          "Probiotics",
+          "ORS"
+        ]
+      },
+      "special_constraints": []
+    },
+    {
+      "case_id": "TC008",
+      "case_name": "Per-Claim Limit Exceeded",
+      "target_path": "data/test_case_missing_artifacts/tc008_02_hospital_bill_emp003.png",
+      "actual_type": "HOSPITAL_BILL",
+      "quality": "GOOD",
+      "prompt_template_id": "hospital_bill_clean",
+      "seed_fields": {
+        "line_items": [
+          {
+            "description": "Consultation Fee",
+            "amount": 2000
+          },
+          {
+            "description": "Medicines",
+            "amount": 5500
+          }
+        ],
+        "total": 7500
+      },
+      "special_constraints": []
+    },
+    {
+      "case_id": "TC009",
+      "case_name": "Fraud Signal - Multiple Same-Day Claims",
+      "target_path": "data/test_case_missing_artifacts/tc009_01_prescription_emp008.jpg",
+      "actual_type": "PRESCRIPTION",
+      "quality": "GOOD",
+      "prompt_template_id": "prescription_clean",
+      "seed_fields": {
+        "doctor_name": "Dr. S. Khan",
+        "diagnosis": "Migraine"
+      },
+      "special_constraints": []
+    },
+    {
+      "case_id": "TC009",
+      "case_name": "Fraud Signal - Multiple Same-Day Claims",
+      "target_path": "data/test_case_missing_artifacts/tc009_02_hospital_bill_emp008.png",
+      "actual_type": "HOSPITAL_BILL",
+      "quality": "GOOD",
+      "prompt_template_id": "hospital_bill_clean",
+      "seed_fields": {
+        "total": 4800
+      },
+      "special_constraints": [
+        "Use a plausible consultation bill totaling exactly 4800.00."
+      ]
+    },
+    {
+      "case_id": "TC010",
+      "case_name": "Network Hospital - Discount Applied",
+      "target_path": "data/test_case_missing_artifacts/tc010_01_prescription_emp010.jpg",
+      "actual_type": "PRESCRIPTION",
+      "quality": "GOOD",
+      "prompt_template_id": "prescription_clean",
+      "seed_fields": {
+        "doctor_name": "Dr. S. Iyer",
+        "doctor_registration": "TN/56789/2013",
+        "patient_name": "Deepak Shah",
+        "diagnosis": "Acute Bronchitis",
+        "medicines": [
+          "Amoxicillin 500mg",
+          "Salbutamol Inhaler"
+        ]
+      },
+      "special_constraints": []
+    },
+    {
+      "case_id": "TC010",
+      "case_name": "Network Hospital - Discount Applied",
+      "target_path": "data/test_case_missing_artifacts/tc010_02_hospital_bill_emp010.png",
+      "actual_type": "HOSPITAL_BILL",
+      "quality": "GOOD",
+      "prompt_template_id": "hospital_bill_clean",
+      "seed_fields": {
+        "hospital_name": "Apollo Hospitals",
+        "patient_name": "Deepak Shah",
+        "line_items": [
+          {
+            "description": "Consultation Fee",
+            "amount": 1500
+          },
+          {
+            "description": "Medicines",
+            "amount": 3000
+          }
+        ],
+        "total": 4500
+      },
+      "special_constraints": []
+    },
+    {
+      "case_id": "TC011",
+      "case_name": "Component Failure - Graceful Degradation",
+      "target_path": "data/test_case_missing_artifacts/tc011_01_prescription_emp006.jpg",
+      "actual_type": "PRESCRIPTION",
+      "quality": "GOOD",
+      "prompt_template_id": "prescription_clean",
+      "seed_fields": {
+        "doctor_name": "Vaidya T. Krishnan",
+        "doctor_registration": "AYUR/KL/2345/2019",
+        "diagnosis": "Chronic Joint Pain",
+        "treatment": "Panchakarma Therapy"
+      },
+      "special_constraints": [
+        "Use an AYUSH or Ayurveda prescription layout with valid practitioner details."
+      ]
+    },
+    {
+      "case_id": "TC011",
+      "case_name": "Component Failure - Graceful Degradation",
+      "target_path": "data/test_case_missing_artifacts/tc011_02_hospital_bill_emp006.png",
+      "actual_type": "HOSPITAL_BILL",
+      "quality": "GOOD",
+      "prompt_template_id": "hospital_bill_clean",
+      "seed_fields": {
+        "hospital_name": "Ayur Wellness Centre",
+        "line_items": [
+          {
+            "description": "Panchakarma Therapy (5 sessions)",
+            "amount": 3000
+          },
+          {
+            "description": "Consultation",
+            "amount": 1000
+          }
+        ],
+        "total": 4000
+      },
+      "special_constraints": []
+    },
+    {
+      "case_id": "TC012",
+      "case_name": "Excluded Treatment",
+      "target_path": "data/test_case_missing_artifacts/tc012_01_prescription_emp009.jpg",
+      "actual_type": "PRESCRIPTION",
+      "quality": "GOOD",
+      "prompt_template_id": "prescription_clean",
+      "seed_fields": {
+        "doctor_name": "Dr. P. Banerjee",
+        "doctor_registration": "WB/34567/2015",
+        "diagnosis": "Morbid Obesity - BMI 37",
+        "treatment": "Bariatric Consultation and Customised Diet Plan"
+      },
+      "special_constraints": []
+    },
+    {
+      "case_id": "TC012",
+      "case_name": "Excluded Treatment",
+      "target_path": "data/test_case_missing_artifacts/tc012_02_hospital_bill_emp009.png",
+      "actual_type": "HOSPITAL_BILL",
+      "quality": "GOOD",
+      "prompt_template_id": "hospital_bill_clean",
+      "seed_fields": {
+        "line_items": [
+          {
+            "description": "Bariatric Consultation",
+            "amount": 3000
+          },
+          {
+            "description": "Personalised Diet and Nutrition Program",
+            "amount": 5000
+          }
+        ],
+        "total": 8000
+      },
+      "special_constraints": []
+    }
+  ]
+}
