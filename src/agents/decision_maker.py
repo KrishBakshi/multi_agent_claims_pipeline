@@ -234,6 +234,18 @@ def build_decision_maker(policy: PolicyLoader):
                 + exclusions.get("dental_exclusions", [])
                 + exclusions.get("vision_exclusions", [])
             )
+            # ALTERNATIVE_MEDICINE is an explicitly covered category (Ayurveda, Homeopathy,
+            # Unani, etc.). Strip "Experimental treatments" from the list so the LLM does
+            # not misclassify recognised traditional medicine as experimental.
+            if category == "ALTERNATIVE_MEDICINE":
+                exclusion_list = [e for e in exclusion_list if "experimental" not in e.lower()]
+
+            opd_cat_info = policy.get_opd_category(category.lower()) or {}
+            covered_systems = opd_cat_info.get("covered_systems", [])
+            category_note = (
+                f"Claim category: {category}"
+                + (f" (covered systems: {', '.join(covered_systems)})" if covered_systems else "")
+            )
             log.debug("Calling Gemini for exclusion check — diagnosis='%s' treatment='%s'",
                       diagnosis or "—", treatment or "—")
             try:
@@ -242,9 +254,11 @@ def build_decision_maker(policy: PolicyLoader):
                     [
                         SystemMessage(
                             "You check whether a medical claim is excluded under a health insurance policy. "
-                            "Answer only based on the exclusion list provided."
+                            "Answer only based on the exclusion list provided. "
+                            "Do NOT apply exclusions that contradict an explicitly covered claim category."
                         ),
                         HumanMessage(
+                            f"{category_note}\n"
                             f"Diagnosis: {diagnosis}\n"
                             f"Treatment: {treatment}\n"
                             f"Policy exclusions: {exclusion_list}\n\n"
