@@ -20,6 +20,38 @@ Any node can set `halted=True` to short-circuit the remaining pipeline. Unhandle
 
 ---
 
+## Confidence Scoring
+
+Overall claim confidence is a deterministic pipeline-health score, not a learned probability. Every claim starts at `1.0` at pipeline entry, and each agent may carry that value forward unchanged or reduce it by a fixed penalty when validation fails, parsing degrades, or a component errors.
+
+### How it works
+
+1. `run_pipeline()` initialises `state["confidence"] = 1.0`
+2. Each agent reads the current confidence from `ClaimState`
+3. If an agent encounters a known degraded condition, it subtracts a fixed penalty and writes the updated scalar back to state
+4. `DecisionMakerAgent` does not recalculate confidence from policy logic; it returns the accumulated score unchanged
+5. `DecisionOutput.confidence_score` is the final rounded value from `state["confidence"]`
+
+### Penalty schedule
+
+| Source | Trigger | Penalty |
+|---|---|---|
+| `_safe` graph wrapper | Unhandled exception in any node | `-0.20` |
+| `DataValidatorAgent` | Structured-input validation halt | `-0.20` |
+| `DataValidatorAgent` | Simulated component failure path | `-0.20` |
+| `DocParserAgent` | Per unreadable document | `-0.15` |
+| `DocParserAgent` | Per parse error or missing content / file bytes | `-0.10` |
+| `DocValidatorAgent` | Document-validation halt | `-0.15` |
+| `DocValidatorAgent` | Simulated component failure path | `-0.15` |
+
+### Important distinction: claim confidence vs document confidence
+
+The pipeline also stores a per-document extraction confidence inside each `ExtractedDocument`. In production OCR mode, Gemini is prompted to return `0.95` when key fields are present and reduce that figure for missing fields. If extraction notes are present, the parser caps document confidence at `0.60`.
+
+That document-level score is used for traceability and debugging only. It does not currently feed back into the overall claim confidence score. Only the fixed pipeline penalties above affect `DecisionOutput.confidence_score`.
+
+---
+
 ## Setup
 
 ### API Key
@@ -251,6 +283,8 @@ Extracts structured fields from each uploaded document. Operates in two modes:
 
 Documents marked `UNREADABLE` are recorded in the trace, confidence is penalised by 0.15, and a stub entry is added so downstream agents know the document exists but could not be read.
 
+When running Gemini Vision OCR, the model also returns a per-document extraction confidence. That value is preserved inside each `ExtractedDocument`, but it does not directly change the overall claim confidence. The overall claim confidence only changes through the fixed penalties described above.
+
 ### LLM usage — Gemini Vision OCR (production mode only)
 
 **Model:** `gemini-3.1-flash-lite` (via `google.generativeai`)  
@@ -391,6 +425,8 @@ No LLM is used. All checks are deterministic.
 ### What it does
 
 Applies all policy rules in a fixed, deterministic sequence and produces one of four outcomes: `APPROVED`, `PARTIAL`, `REJECTED`, or `MANUAL_REVIEW`.
+
+This agent does not compute a new confidence score from approval or rejection logic. It reads the accumulated `state["confidence"]` and returns it unchanged in the final result. A clean rejection for a policy reason can therefore still have `confidence=1.0`, while an approval after degraded processing may have a lower score.
 
 Checks run in order:
 
