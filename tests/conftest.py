@@ -1,5 +1,11 @@
 from __future__ import annotations
 
+import os
+
+# Keep unit tests off LangSmith unless explicitly enabled.
+os.environ.setdefault("LANGSMITH_TRACING", "false")
+os.environ.setdefault("LANGCHAIN_TRACING_V2", "false")
+
 import json
 from pathlib import Path
 

@@ -23,6 +23,7 @@ from src.agents.decision_maker import build_decision_maker
 from src.agents.doc_parser import build_doc_parser
 from src.agents.doc_validator import build_doc_validator
 from src.core.logger import claim_logger, get_logger
+from src.core.tracing import build_run_config, configure_langsmith
 from src.core.policy_loader import PolicyLoader, get_policy_loader
 from src.models.claim import ClaimInput
 from src.models.decision import (
@@ -141,6 +142,8 @@ def run_pipeline(claim: ClaimInput, policy: PolicyLoader | None = None) -> Decis
     Returns:
         DecisionOutput with decision, amounts, trace, and confidence.
     """
+    configure_langsmith()
+
     pipeline = build_pipeline(policy)
     claim_id = str(uuid.uuid4())[:8].upper()
     log = claim_logger("pipeline.graph", claim_id)
@@ -175,7 +178,8 @@ def run_pipeline(claim: ClaimInput, policy: PolicyLoader | None = None) -> Decis
         "manual_review_recommended": False,
     }
 
-    final_state: ClaimState = pipeline.invoke(initial_state)
+    run_config = build_run_config(claim_id, claim.model_dump())
+    final_state: ClaimState = pipeline.invoke(initial_state, config=run_config)
     output = _state_to_output(claim_id, final_state)
 
     if final_state.get("halted"):

@@ -6,6 +6,7 @@ from pathlib import Path
 from fastapi import APIRouter, HTTPException
 
 from src.core.logger import get_logger
+from src.core.tracing import get_langsmith_endpoint, is_tracing_enabled
 from src.models.claim import ClaimInput
 from src.models.decision import DecisionOutput
 from src.pipeline.graph import run_pipeline
@@ -19,7 +20,11 @@ _TEST_CASES_PATH = Path(__file__).parent.parent.parent / "tests" / "test_cases.j
 @router.get("/health")
 def health():
     log.debug("Health check")
-    return {"status": "ok"}
+    return {
+        "status": "ok",
+        "langsmith_tracing": is_tracing_enabled(),
+        "langsmith_endpoint": get_langsmith_endpoint() if is_tracing_enabled() else None,
+    }
 
 
 @router.get("/test-cases")

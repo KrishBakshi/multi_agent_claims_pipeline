@@ -18,11 +18,15 @@ from pathlib import Path
 import streamlit as st
 from dotenv import load_dotenv
 
-load_dotenv()
-
 ROOT = Path(__file__).parent.parent.parent
+load_dotenv(ROOT / ".env")
+
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+
+from src.core.tracing import configure_langsmith  # noqa: E402
+
+configure_langsmith()
 
 from src.core.logger import get_logger, setup_logging  # noqa: E402
 from src.models.claim import ClaimInput, Document, DocumentContent, LineItem  # noqa: E402

@@ -1,16 +1,24 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from dotenv import load_dotenv
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 
-from src.api.routes import router
-from src.core.logger import get_logger, setup_logging
-from src.core.policy_loader import get_policy_loader
+# Load env and LangSmith client before any pipeline/langsmith imports.
+load_dotenv(Path(__file__).resolve().parent.parent.parent / ".env")
 
-load_dotenv()
+from src.core.tracing import configure_langsmith  # noqa: E402
+
+configure_langsmith()
+
+from fastapi import FastAPI  # noqa: E402
+from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
+
+from src.api.routes import router  # noqa: E402
+from src.core.logger import get_logger, setup_logging  # noqa: E402
+from src.core.policy_loader import get_policy_loader  # noqa: E402
+
 setup_logging()
 
 
