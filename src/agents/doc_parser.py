@@ -29,8 +29,10 @@ import os
 import pymupdf
 from PIL import Image
 import google.generativeai as genai
+from langsmith import traceable
 
 from src.core.logger import claim_logger
+from src.core.tracing import redact_document_inputs
 from src.models.state import ClaimState
 
 CONFIDENCE_PENALTY_UNREADABLE = 0.15
@@ -138,6 +140,7 @@ def _from_content(doc: dict) -> dict:
     }
 
 
+@traceable(name="gemini_vision_ocr", run_type="llm", process_inputs=redact_document_inputs)
 def _from_gemini_ocr(doc: dict) -> dict:
     """Gemini Vision production path: image → structured ExtractedDocument JSON.
 
