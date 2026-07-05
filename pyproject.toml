@@ -17,6 +17,7 @@ dependencies = [
     "langchain-google-genai>=1.0.0",
     "google-generativeai>=0.7.0",
     "langgraph>=0.2.0",
+    "langsmith>=0.2.0",
     "python-multipart>=0.0.9",
     "streamlit>=1.35.0",
     "python-dotenv>=1.0.1",
